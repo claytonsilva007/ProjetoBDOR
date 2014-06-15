@@ -5,7 +5,7 @@ import controller.Controlador;
 
 public class PacienteBean extends Paciente{
 	
-	public void carregar(){
+	public void getCarregar(){
 		this.setNome("clayton rodrigues da silva");
 		this.setConvenio("");
 		this.setFoto("");
@@ -22,7 +22,7 @@ public class PacienteBean extends Paciente{
 	
 	public static void main (String args[]){
 		PacienteBean paciente = new PacienteBean();
-		paciente.carregar();
+		paciente.getCarregar();
 		paciente.cadastrarPaciente();
 	
 	}

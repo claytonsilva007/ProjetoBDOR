@@ -1,0 +1,47 @@
+body {
+    margin:0;
+    padding:0;
+    color:#000;
+    background:#fff;
+}
+#geral {
+    width:960px;
+    margin:0 auto;
+    background:#ddd;
+}
+
+#topo {
+	height:100px;
+	background-color: red;
+	alignment: center;
+}
+
+#left {
+    float:left;
+     /* diminuimos a largura para não quebrar o layout. 
+      * valor antigo 220
+      */
+    width:210px;
+    padding:10px;
+    background:#bfb;
+}
+#meio {
+    float:left;
+    width:460px;
+    padding:10px;
+    background:#ddf;
+}
+#rigth {
+    float:right;
+    /*diminuimos a largura para não quebrar o layout
+    * valor antigo 220
+    */
+    width:200px;
+    padding:10px;
+    background:#dff;
+}
+#rodape {
+    clear:both;
+    padding:10px;
+    background:#ff9;
+}
