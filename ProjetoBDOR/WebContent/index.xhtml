@@ -9,68 +9,40 @@
 </h:head>
 <h:body>
 	<f:view>
-		<div id="geral">
-			<div id="topo">colocar informações aqui no topo</div>
-			<div id="principal">
-				<div id="left">menu esquerdo</div>
-				<div id="info-2">
-					<div id="meio">
-						<p:outputLabel value="#{pacienteBean.getCarregar()}"
-							id="idCarregar" />
-						<h:form id="formPaciente">
-							<h:panelGrid columns="2">
-								<p:outputLabel id="idNome">Nome: </p:outputLabel>
-								<p:inputText id="idInputNome" size="40" maxlength="50" />
+		<p:outputLabel value="#{pacienteBean.getCarregar()}" id="idCarregar" />
+		<h:form id="formPaciente">
+			<h:panelGrid columns="2">
+				<p:outputLabel id="idNome">Nome: </p:outputLabel>
+				<p:inputText id="idInputNome" size="40" maxlength="50"
+					value="#{pacienteBean.nome}" />
 
-								<p:outputLabel value="CPF: " rendered="true" />
-								<p:inputText id="idCpf" size="11" maxlength="11" />
+				<p:outputLabel value="CPF: " rendered="true" />
+				<p:inputText id="idCpf" size="11" maxlength="11" />
 
-								<p:outputLabel for="popup" value="Data Nasc.:" />
-								<p:calendar id="popup" size="11" maxlength="10" />
+				<p:outputLabel for="popup" value="Data Nasc.:" />
+				<p:calendar id="popup" size="11" maxlength="10" />
 
-								<p:outputLabel for="console" value="Sexo:" />
-								<p:selectOneRadio id="console" value="">
-									<f:selectItem itemLabel="Masculino" itemValue="M" />
-									<f:selectItem itemLabel="Feminino" itemValue="F" />
-								</p:selectOneRadio>
-							</h:panelGrid>
-							
-							<p:outputLabel value="Telefones" />
-							<p:panelGrid id="gridcolunas" columns="2">
-								<h:panelGroup id="groupDDDFixo">
-									<p:outputLabel id="idLabelResidencialDDD" value="DDD: " />
-									<p:inputText id="inputDDDFixo" size="2" maxlength="2"/>
-								</h:panelGroup>
-								<h:panelGroup id="groupFoneFixo">
-									<p:outputLabel id="idLabelFoneRes" value="Fone.: "/>
-									<p:inputText value="" size="8" maxlength="8"/>
-								</h:panelGroup>
-								<h:panelGroup id="groupDDDCel">
-									<p:outputLabel id="idLabelDDD" value="DDD: " />
-									<p:inputText id="inputDDDCel" size="2" maxlength="2"/>
-								</h:panelGroup>
-								<h:panelGroup id="groupCelFone">
-									<p:outputLabel id="idFoneFixo" value="Fone.: " />
-									<p:inputText id="inputFoneCel" size="8" maxlength="8"/>
-								</h:panelGroup>
-								
-								<h:panelGroup id="groupDDDCel2">
-									<p:outputLabel id="idLabelDDD2" value="DDD: " />
-									<p:inputText id="inputDDDCel2" size="2" maxlength="2"/>
-								</h:panelGroup>
-								<h:panelGroup id="groupCelFone2">
-									<p:outputLabel id="idFoneFixo2" value="Fone.: " />
-									<p:inputText id="inputFoneCel2" size="8" maxlength="8"/>
-								</h:panelGroup>
-							</p:panelGrid>
-						</h:form>
-					</div>
-					<div id="rigth">menu direito</div>
-				</div>
-			</div>
-			<div id="rodape">rodapé</div>
-		</div>
+				<p:outputLabel for="console" value="Sexo:" />
+				<p:selectOneRadio id="console" value="">
+					<f:selectItem itemLabel="Masculino" itemValue="M" />
+					<f:selectItem itemLabel="Feminino" itemValue="F" />
+				</p:selectOneRadio>
+			</h:panelGrid>
 
+			<p:outputLabel value="Telefones" />
+			<p:panelGrid id="gridcolunas" columns="2">
+				<h:panelGroup id="groupDDDFixo">
+					<p:outputLabel id="idLabelResidencialDDD" value="DDD: " />
+					<p:inputText id="inputDDDFixo" size="2" maxlength="2" />
+				</h:panelGroup>
+				<h:panelGroup id="groupFoneFixo">
+					<p:outputLabel id="idLabelFoneRes" value="Fone.: " />
+					<p:inputText value="" size="8" maxlength="8" />
+				</h:panelGroup>
+			</p:panelGrid>
+			<p:commandButton value="Cadastrar" id="bt_cadastrar" action="#{pacienteBean.cadastrarPaciente}" 
+			immediate="true"/>
+		</h:form>
 	</f:view>
 </h:body>
 </html>

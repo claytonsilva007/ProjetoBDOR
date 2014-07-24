@@ -1,5 +1,5 @@
 package classesbasicas;
 
-public class Medico extends Funcionario{
+public class Medico{
 
 }
