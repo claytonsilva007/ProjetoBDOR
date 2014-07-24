@@ -13,7 +13,10 @@ public class Paciente {
 	private String foto;
 	private String nome;
 	
-	
+	public Paciente() {
+		
+	}
+			
 	public String getCpf() {
 		return cpf;
 	}

@@ -1,7 +1,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	>
 
 <h:head> 
 	<title>Projeto BDOR</title>
@@ -40,8 +41,7 @@
 					<p:inputText value="" size="8" maxlength="8" />
 				</h:panelGroup>
 			</p:panelGrid>
-			<p:commandButton value="Cadastrar" id="bt_cadastrar" action="#{pacienteBean.cadastrarPaciente}" 
-			immediate="true"/>
+			<p:commandButton value="Cadastrar" id="ajax" action="#{pacienteBean.cadastrarPaciente}" ajax="true" process="@this" />
 		</h:form>
 	</f:view>
 </h:body>

@@ -2,6 +2,8 @@ package beans;
 
 import java.util.ArrayList;
 
+import javax.faces.event.ActionEvent;
+
 import classesbasicas.Endereco;
 import classesbasicas.Paciente;
 import classesbasicas.Telefone;
@@ -23,7 +25,6 @@ public class PacienteBean {
 	 */
 	public String getCarregar(){
 		this.idPaciente = null;
-		this.cpf = null;
 		nome = null;
 		this.estadoCivil = null;
 		foto = null;
@@ -34,29 +35,24 @@ public class PacienteBean {
 		return "";
 	}
 
-	public String cadastrarPaciente(Paciente paciente){
-		System.out.println("Chamou o método cadastrar");
-		return "sucesso";
-	}
+	public void cadastrarPaciente() {
+        System.out.println("Welcome to Primefaces!!");
+    }
 	
-	public String alterarPaciente(Paciente paciente){
+	public void alterarPaciente(Paciente paciente){
 		System.out.println("Chamou o método alterar");
-		return "sucesso";
 	}
 	
-	public String consultarPaciente(String cpf){
+	public void consultarPaciente(String cpf){
 		System.out.println("Chamou o método consultar");
-		return "sucesso";
 	}
 	
-	public String removerPaciente(String cpf){
+	public void removerPaciente(String cpf){
 		System.out.println("Chamou o método remover");
-		return "sucesso";
 	}
 	
-	public String solicitarAgendamento(){
+	public void solicitarAgendamento(){
 		//falta implementar
-		return "sucesso";
 	}
 	
 	public String solicitarCancelamento(){
