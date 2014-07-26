@@ -1,5 +1,9 @@
 package controller;
 
+import java.io.InputStream;
+
+import javax.imageio.stream.FileImageOutputStream;
+
 import persistense.RepositorioPacienteBDR;
 import util.ConnectionFactory;
 import classesbasicas.Paciente;
@@ -28,5 +32,8 @@ public class Controlador {
 	
 	public void cadastrarPaciente(Paciente paciente){
 		this.repositorioPaciente.cadastrarPaciente(paciente);
+	}
+	public void cadastrarFoto(InputStream data){
+		this.repositorioPaciente.inserirFoto(data);
 	}
 }

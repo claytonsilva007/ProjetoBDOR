@@ -1,7 +1,9 @@
 package beans;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.faces.FacesException;
 import javax.faces.bean.ManagedBean;
@@ -11,6 +13,8 @@ import javax.imageio.stream.FileImageOutputStream;
 import javax.servlet.ServletContext;
 
 import org.primefaces.event.CaptureEvent;
+
+import controller.Controlador;
  
 @ManagedBean
 @ViewScoped
@@ -29,22 +33,11 @@ public class PhotoCamView {
     }
      
     public void oncapture(CaptureEvent captureEvent) {
-        filename = getRandomImageName();
-        String foto = filename + ".png";
+        filename = getRandomImageName() + ".png";
                 
         byte[] data = captureEvent.getData();
-        ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-        String newFileName = servletContext.getRealPath(File.separator + "imagens" + File.separator + "tmp" + File.separator + foto);
+        InputStream in = new ByteArrayInputStream(data);
         
-        FileImageOutputStream imageOutput;
-        try {
-        	//jogar esses dados para o oracle
-            imageOutput = new FileImageOutputStream(new File(newFileName));
-            imageOutput.write(data, 0, data.length);
-            imageOutput.close();
-        }
-        catch(IOException e) {
-            throw new FacesException("Error in writing captured image.", e);
-        }
+        Controlador.getcontrolador().cadastrarFoto(in);
     }
 }

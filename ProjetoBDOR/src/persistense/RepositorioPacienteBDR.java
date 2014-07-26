@@ -1,6 +1,8 @@
 package persistense;
 
+import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,6 +14,27 @@ import classesbasicas.Pessoa;
 
 public class RepositorioPacienteBDR implements InterfacePaciente{
 
+	
+	public void inserirFoto(InputStream data){
+		
+		Connection conexao = null;
+		PreparedStatement stmt = null;
+		
+		try {
+			conexao = ConnectionFactory.getConnection();
+			stmt = conexao.prepareStatement("INSERT INTO foto VALUES ('?, ?')");
+
+			stmt.setInt(1, 1);
+			stmt.setBinaryStream(2, data);
+			stmt.executeUpdate();
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void cadastrarPaciente(Paciente paciente) {
 		Connection conexao = null;
 		Statement stmt = null;
