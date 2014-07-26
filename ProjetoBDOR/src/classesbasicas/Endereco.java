@@ -8,8 +8,6 @@ public class Endereco {
 	private String cep;
 	private String estado;
 	
-	
-	
 	public Endereco() {
 		
 	}

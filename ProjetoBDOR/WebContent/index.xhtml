@@ -1,48 +1,98 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	>
+	xmlns:p="http://primefaces.org/ui">
 
-<h:head> 
+<h:head>
 	<title>Projeto BDOR</title>
-	<link type="text/css" rel="stylesheet" media="screen" href="./style.css" />
+	<link type="text/css" rel="stylesheet" media="screen"
+		href="./style.css" />
 </h:head>
 <h:body>
 	<f:view>
-		<p:outputLabel value="#{pacienteBean.getCarregar()}" id="idCarregar" />
+		<p:tooltip />
 		<h:form id="formPaciente">
-			<h:panelGrid columns="2">
-				<p:outputLabel id="idNome">Nome: </p:outputLabel>
+<!-- 			<h:panelGrid columns="2" id="gridPrincipal">
+				<p:outputLabel id="idNome" value="Nome" />
 				<p:inputText id="idInputNome" size="40" maxlength="50"
-					value="#{pacienteBean.nome}" />
+					value="#{pacienteBean.nome}" required="true" />
 
-				<p:outputLabel value="CPF: " rendered="true" />
-				<p:inputText id="idCpf" size="11" maxlength="11" />
+				<p:outputLabel value="CPF * : " />
+				<p:inputText id="idCpf" size="11" maxlength="11" required="true"
+					value="#{pacienteBean.cpf}">
+					<f:convertNumber integerOnly="true" />
+				</p:inputText>
+				<p:outputLabel for="popup" value="Data Nasc." />
+				<p:calendar id="popup" size="11" maxlength="10" required="true"
+					value="#{pacienteBean.dataNasc}" />
 
-				<p:outputLabel for="popup" value="Data Nasc.:" />
-				<p:calendar id="popup" size="11" maxlength="10" />
-
-				<p:outputLabel for="console" value="Sexo:" />
-				<p:selectOneRadio id="console" value="">
+				<p:outputLabel for="console" value="Sexo * :" />
+				<p:selectOneRadio id="console" value="#{pacienteBean.sexo}">
 					<f:selectItem itemLabel="Masculino" itemValue="M" />
 					<f:selectItem itemLabel="Feminino" itemValue="F" />
 				</p:selectOneRadio>
 			</h:panelGrid>
 
-			<p:outputLabel value="Telefones" />
-			<p:panelGrid id="gridcolunas" columns="2">
-				<h:panelGroup id="groupDDDFixo">
-					<p:outputLabel id="idLabelResidencialDDD" value="DDD: " />
-					<p:inputText id="inputDDDFixo" size="2" maxlength="2" />
-				</h:panelGroup>
-				<h:panelGroup id="groupFoneFixo">
-					<p:outputLabel id="idLabelFoneRes" value="Fone.: " />
-					<p:inputText value="" size="8" maxlength="8" />
-				</h:panelGroup>
+			<p />
+			<p:separator>BLOCO DE ENDEREÇOS</p:separator>
+			<p />
+
+			<p:panelGrid id="gridcolunas" columns="4">
+				<p:outputLabel id="labelEndereco" value="Endereco*: " />
+				<p:inputText id="inputEndereco" value="#{pacienteBean.logradouro}" required="true" maxlength="150" size="80"/>
+				
+				<p:outputLabel id="labelComplemento" value="Complemento: " />
+				<p:inputText id="inputComplemento" value="#{pacienteBean.complemento}" maxlength="5"/>
+				
+				<p:outputLabel id="labelCidade" value="Cidade*: " />
+				<p:inputText id="inputCidade" value="#{pacienteBean.cidade}" required="true" maxlength="50" size="40"/>
+				
+				<p:outputLabel id="labelBairro" value="Bairro*: " />
+				<p:inputText id="inputBairro" value="#{pacienteBean.bairro}" required="true" maxlength="50" size="40"/>
+				
+				<p:outputLabel id="labelCep" value="CEP: " />
+				<p:inputText id="inputCep" value="#{pacienteBean.cep}" maxlength="7"> 
+					<f:convertNumber integerOnly="true"/>
+				</p:inputText>
+				
+				<p:outputLabel id="labelEstado" value="Estado*: " />
+				<p:inputText id="inputEstado" value="#{pacienteBean.estado}" required="true"/>
+				
+				<p:outputLabel id="idLabelResidencialDDD" value="DDD*: " />
+				<p:inputText id="inputDDDFixo" size="2" maxlength="2" required="true" value="#{pacienteBean.ddd}">
+					<f:convertNumber integerOnly="true" />
+				</p:inputText>
+				
+				<p:outputLabel id="idLabelFoneRes" value="Fone*: " />
+				<p:inputText value="#{pacienteBean.numTel}" size="8" maxlength="8" required="true">
+					<f:convertNumber integerOnly="true" />
+				</p:inputText>
 			</p:panelGrid>
-			<p:commandButton value="Cadastrar" id="ajax" action="#{pacienteBean.cadastrarPaciente}" ajax="true" process="@this" />
+		 -->
+			<!--COMPONENTE DE FOTOS -->
+
+			<h:panelGrid columns="3" cellpadding="5">
+				<p:photoCam widgetVar="pc" listener="#{photoCamView.oncapture}" update="photo" />
+				<p:commandButton type="button" value="Capture" onclick="PF('pc').capture()" />
+				<p:graphicImage id="photo" name="demo/images/photocam/#{photoCamView.filename}.png" />
+			</h:panelGrid>
+
+			<p:commandButton value="Cadastrar" id="ajax"
+				actionListener="#{pacienteBean.cadastrarPaciente}" ajax="true"
+				process="@form" update="formPaciente" />
+
+			<p:messages id="mensagens" showDetail="true" showSummary="true"
+				closable="true" autoUpdate="true" />
 		</h:form>
 	</f:view>
 </h:body>
 </html>
+
+
+
+
+
+
+
+
+

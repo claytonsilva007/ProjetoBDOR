@@ -1,7 +1,8 @@
 package controller;
 
 import persistense.RepositorioPacienteBDR;
-import classesbasicas.Pessoa;
+import util.ConnectionFactory;
+import classesbasicas.Paciente;
 
 public class Controlador {
 	private RepositorioPacienteBDR repositorioPaciente; 
@@ -25,7 +26,7 @@ public class Controlador {
 		return controlador;
 	}	
 	
-	public void cadastrar(Pessoa pessoa){
-		this.repositorioPaciente.inserir(pessoa);
+	public void cadastrarPaciente(Paciente paciente){
+		this.repositorioPaciente.cadastrarPaciente(paciente);
 	}
 }

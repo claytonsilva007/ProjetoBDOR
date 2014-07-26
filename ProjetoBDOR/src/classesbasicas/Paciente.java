@@ -10,8 +10,10 @@ public class Paciente {
 	private char sexo;
 	private ArrayList<Endereco> listaDeEnderecos;
 	private ArrayList<Telefone> telefones;
-	private String foto;
+	private byte[] foto;
 	private String nome;
+	private Endereco endereco;
+	private Telefone telefone;
 	
 	public Paciente() {
 		
@@ -53,12 +55,7 @@ public class Paciente {
 	public void setTelefones(ArrayList<Telefone> telefones) {
 		this.telefones = telefones;
 	}
-	public String getFoto() {
-		return foto;
-	}
-	public void setFoto(String foto) {
-		this.foto = foto;
-	}
+
 	public String getConvenio() {
 		return convenio;
 	}
@@ -70,5 +67,29 @@ public class Paciente {
 	}
 	public void setIdPaciente(String idPaciente) {
 		this.idPaciente = idPaciente;
+	}
+
+	public Endereco getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
+
+	public Telefone getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(Telefone telefone) {
+		this.telefone = telefone;
+	}
+
+	public byte[] getFoto() {
+		return foto;
+	}
+
+	public void setFoto(byte[] foto) {
+		this.foto = foto;
 	}
 }

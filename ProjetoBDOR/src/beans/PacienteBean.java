@@ -1,12 +1,18 @@
 package beans;
 
 import java.util.ArrayList;
+import java.util.Date;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import util.ValidaCPF;
 import classesbasicas.Endereco;
 import classesbasicas.Paciente;
 import classesbasicas.Telefone;
+import controller.Controlador;
 
 public class PacienteBean {
 	private String convenio;
@@ -15,29 +21,67 @@ public class PacienteBean {
 	private String estadoCivil;
 	private char sexo;
 	private ArrayList<Endereco> listaDeEnderecos;
-	private ArrayList<Telefone> telefones;
-	private String foto;
+	private String telefone;
+	private String ddd;
+	private String numTel;
+	private ArrayList<Telefone> listaDeTelefones;
 	private String nome;
-
-	/**
-	 * Método utilizado para inicializar as variáveis
-	 * sempre que a tela for recarregada.
-	 */
-	public String getCarregar(){
-		this.idPaciente = null;
-		nome = null;
-		this.estadoCivil = null;
-		foto = null;
-		this.sexo = ' ';
-		this.convenio = null;
-		this.listaDeEnderecos = null;
-		this.telefones = null;
-		return "";
-	}
-
-	public void cadastrarPaciente() {
-        System.out.println("Welcome to Primefaces!!");
-    }
+	private Date dataNasc;
+	private Endereco endereco;
+	private String cidade;
+	private String bairro;
+	private String logradouro;
+	private String complemento;
+	private String cep;
+	private String estado;
+	
+	@ManagedProperty(value="#{paciente}")
+	private Paciente paciente;
+	
+	public void cadastrarPaciente(ActionEvent event) {
+//		if(this.preencheuCamposObrigatorios()){
+			
+/*			Paciente paciente = new Paciente(); 
+			Endereco endereco = new Endereco();
+			
+			paciente.setConvenio(this.convenio);
+			paciente.setCpf(this.cpf);
+			paciente.setEstadoCivil(this.estadoCivil);
+			paciente.setIdPaciente(this.idPaciente);
+			paciente.setNome(this.nome);
+			paciente.setSexo(this.sexo);
+			paciente.setListaDeEnderecos(this.listaDeEnderecos);
+			this.setTelefone(this.ddd + this.numTel);
+			paciente.setTelefones(this.listaDeTelefones);
+			endereco.setBairro(this.bairro);
+			
+			endereco.setCep(this.cep);
+			endereco.setCidade(this.cidade);
+			endereco.setComplemento(this.complemento);
+			endereco.setEstado(this.estado);
+			endereco.setLogradouro(this.logradouro);
+			
+			paciente.setEndereco(endereco);
+			
+			Controlador.getcontrolador().cadastrarPaciente(paciente);
+*/			
+/*		} else {
+			
+			boolean cpfInvalido = ValidaCPF.validar(this.cpf); 
+			
+			if(cpfInvalido){
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_WARN, "",
+								"Preecha os campos obrigatórios"));
+			}else{
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
+								"CPF inválido!"));
+			}
+		}
+*/	}
 	
 	public void alterarPaciente(Paciente paciente){
 		System.out.println("Chamou o método alterar");
@@ -49,6 +93,22 @@ public class PacienteBean {
 	
 	public void removerPaciente(String cpf){
 		System.out.println("Chamou o método remover");
+	}
+	
+	public boolean preencheuCamposObrigatorios(){
+		boolean preencheu = false;
+		boolean cpfValido = ValidaCPF.validar(this.cpf);
+		if( (this.cpf != null && cpfValido) 
+				&& (this.nome != null) 
+				&& (this.logradouro != null)
+				&&(this.cidade != null)
+				&& (this.estado != null)
+				&& (this.ddd != null)
+				&& (this.numTel != null)){
+
+			preencheu = true;
+		} 
+		return preencheu;
 	}
 	
 	public void solicitarAgendamento(){
@@ -112,20 +172,12 @@ public class PacienteBean {
 		this.listaDeEnderecos = listaDeEnderecos;
 	}
 
-	public ArrayList<Telefone> getTelefones() {
-		return telefones;
+	public ArrayList<Telefone> getListaDeTelefones() {
+		return listaDeTelefones;
 	}
 
-	public void setTelefones(ArrayList<Telefone> telefones) {
-		this.telefones = telefones;
-	}
-
-	public String getFoto() {
-		return foto;
-	}
-
-	public void setFoto(String foto) {
-		this.foto = foto;
+	public void setListaDeTelefones(ArrayList<Telefone> telefones) {
+		this.listaDeTelefones = telefones;
 	}
 
 	public String getNome() {
@@ -135,4 +187,89 @@ public class PacienteBean {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+
+	public Date getDataNasc() {
+		return dataNasc;
+	}
+
+	public void setDataNasc(Date dataNasc) {
+		this.dataNasc = dataNasc;
+	}
+
+	public String getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
+
+	public String getDdd() {
+		return ddd;
+	}
+
+	public void setDdd(String ddd) {
+		this.ddd = ddd;
+	}
+
+	public String getNumTel() {
+		return numTel;
+	}
+
+	public void setNumTel(String numTel) {
+		this.numTel = numTel;
+	}
+
+	public Endereco getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
+	
+	public String getCidade() {
+		return cidade;
+	}
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+	public String getBairro() {
+		return bairro;
+	}
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+	public String getLogradouro() {
+		return logradouro;
+	}
+	public void setLogradouro(String logradouro) {
+		this.logradouro = logradouro;
+	}
+	public String getComplemento() {
+		return complemento;
+	}
+	public void setComplemento(String complemento) {
+		this.complemento = complemento;
+	}
+	public String getCep() {
+		return cep;
+	}
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
+	public String getEstado() {
+		return estado;
+	}
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public Paciente getPaciente() {
+		return paciente;
+	}
+
+	public void setPaciente(Paciente paciente) {
+		this.paciente = paciente;
+	}	
 }
