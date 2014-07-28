@@ -7,6 +7,7 @@ public class Endereco {
 	private String complemento;
 	private String cep;
 	private String estado;
+	private int numero;
 	
 	public Endereco() {
 		
@@ -47,5 +48,13 @@ public class Endereco {
 	}
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+
+	public int getNumero() {
+		return numero;
+	}
+
+	public void setNumero(int numero) {
+		this.numero = numero;
 	}	
 }

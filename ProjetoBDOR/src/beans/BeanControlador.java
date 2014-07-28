@@ -7,10 +7,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-
-
+import javax.annotation.ManagedBean;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -23,10 +22,12 @@ import classesbasicas.Paciente;
 import classesbasicas.Telefone;
 import controller.Controlador;
 
-@ManagedBean(name="pacienteBean")
+@ManagedBean(value="beanControlador")
 @SessionScoped
-public class PacienteBean {
+public class BeanControlador {
 
+	private String convenio;
+	private String idPaciente;
 	private String cpf;
 	private String estadoCivil;
 	private String sexo;
@@ -46,34 +47,64 @@ public class PacienteBean {
 	private String estado;
 	private int numero;
 	private InputStream foto;
-	
+
+	private String crm;
+	private String especialidade;
+	private String matricula;
+
+	private boolean exibirCrm;
+	private boolean exibirMatricula;
+	private boolean exibirEspecialidade;
+
 	private Paciente paciente;
 	
 	private String tipoCadastroSelecionado;  
 	private Map<String,String> tiposCadastro = new HashMap<String, String>();
-	
-	public PacienteBean() {
-		/*this.exibirCrm = false;
+
+	public String getCarregar() {
+
+
+		this.exibirCrm = false;
 		this.exibirEspecialidade = false;
-		this.exibirMatricula = false;*/
+		this.exibirMatricula = false;
 
 		tiposCadastro = new HashMap<String, String>();
 		tiposCadastro.put(" ", " ");
 		tiposCadastro.put("Paciente", "Paciente");
 		tiposCadastro.put("Medico","Medico");
 		tiposCadastro.put("Atendente","Atendente");
+
+
+
+
+
+		return "";
+	}
+
+	public BeanControlador(){
+
+		this.exibirCrm = false;
+		this.exibirEspecialidade = false;
+		this.exibirMatricula = false;
+
+		tiposCadastro = new HashMap<String, String>();
+		tiposCadastro.put(" ", " ");
+		tiposCadastro.put("Paciente", "Paciente");
+		tiposCadastro.put("Medico","Medico");
+		tiposCadastro.put("Atendente","Atendente");
+
 	}
 
 	public void cadastrarPaciente(ActionEvent event) {
 		if(this.preencheuCamposObrigatorios()){
-			
+
 			Paciente paciente = new Paciente(); 
 			Endereco endereco = new Endereco();
-			
-			//paciente.setConvenio(this.convenio);
+
+			paciente.setConvenio(this.convenio);
 			paciente.setCpf(this.cpf);
 			paciente.setEstadoCivil(this.estadoCivil);
-			//paciente.setIdPaciente(this.idPaciente);
+			paciente.setIdPaciente(this.idPaciente);
 			paciente.setNome(this.nome);
 			paciente.setSexo(this.sexo);
 			paciente.setFoto(this.foto);
@@ -88,15 +119,15 @@ public class PacienteBean {
 			endereco.setEstado(this.estado);
 			endereco.setLogradouro(this.logradouro);
 			endereco.setNumero(this.numero);
-			
+
 			paciente.setEndereco(endereco);
-			
+
 			Controlador.getcontrolador().cadastrarPaciente(paciente);
-		
+
 		} else {
-			
+
 			boolean cpfInvalido = ValidaCPF.validar(this.cpf); 
-			
+
 			if(cpfInvalido){
 				FacesContext.getCurrentInstance().addMessage(
 						null,
@@ -110,19 +141,19 @@ public class PacienteBean {
 			}
 		}
 	}
-	
+
 	public void alterarPaciente(Paciente paciente){
 		System.out.println("Chamou o método alterar");
 	}
-	
+
 	public void consultarPaciente(String cpf){
 		System.out.println("Chamou o método consultar");
 	}
-	
+
 	public void removerPaciente(String cpf){
 		System.out.println("Chamou o método remover");
 	}
-	
+
 	public boolean preencheuCamposObrigatorios(){
 		boolean preencheu = false;
 		boolean cpfValido = ValidaCPF.validar(this.cpf);
@@ -132,38 +163,55 @@ public class PacienteBean {
 				&&(this.cidade != null)
 				&& (this.estado != null)
 				&& (this.ddd != null)
-				&& (this.numTel != null)){
+				&& (this.numTel != null)
+				&& ("".equals(this.tipoCadastroSelecionado != null))){
 
 			preencheu = true;
 		} 
 		return preencheu;
 	}
-	
+
+	public void renderizarComponentes(){
+		if(this.tipoCadastroSelecionado.equalsIgnoreCase("Medico")){
+			this.exibirCrm = true;
+			this.exibirEspecialidade = true;
+			this.exibirMatricula = false;
+		}else if(this.tipoCadastroSelecionado.equalsIgnoreCase("Atendente")){
+			this.exibirCrm = true;
+			this.exibirEspecialidade = true;
+			this.exibirMatricula = false;
+		} else{
+			this.exibirCrm = false;
+			this.exibirEspecialidade = false;
+			this.exibirMatricula = false;
+		}
+	}
+
 	public void solicitarAgendamento(){
 		//falta implementar
 	}
-	
+
 	public String solicitarCancelamento(){
 		//falta implementar
 		return "sucesso";
 	}
-	
+
 	public void consultarResultadoExames(){
 		//falta implementar
 	}
 
 	public void oncapture(CaptureEvent captureEvent) {
-        byte[] data = captureEvent.getData();
-        InputStream in = new ByteArrayInputStream(data);
-        this.foto = in;
-    }
-	
+		byte[] data = captureEvent.getData();
+		InputStream in = new ByteArrayInputStream(data);
+		this.foto = in;
+	}
+
 	public InputStream consultarImagem(int id){
 		InputStream blob = Controlador.getcontrolador().consultarImagem(id);
 		return blob;
 	}
-	
-	/*public String getConvenio() {
+
+	public String getConvenio() {
 		return convenio;
 	}
 
@@ -177,7 +225,7 @@ public class PacienteBean {
 
 	public void setIdPaciente(String idPaciente) {
 		this.idPaciente = idPaciente;
-	}*/
+	}
 
 	public String getCpf() {
 		return cpf;
@@ -266,7 +314,7 @@ public class PacienteBean {
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
 	}
-	
+
 	public String getCidade() {
 		return cidade;
 	}
@@ -326,5 +374,71 @@ public class PacienteBean {
 
 	public void setFoto(InputStream foto) {
 		this.foto = foto;
-	}	
+	}
+
+	public String getCrm() {
+		return crm;
+	}
+
+	public void setCrm(String crm) {
+		this.crm = crm;
+	}
+
+	public String getTipoCadastroSelecionado() {
+		return tipoCadastroSelecionado;
+	}
+
+	public void setTipoCadastroSelecionado(String tipoCadastroSelecionado) {
+		this.tipoCadastroSelecionado = tipoCadastroSelecionado;
+	}
+
+	public Map<String, String> getTiposCadastro() {
+		return tiposCadastro;
+	}
+
+	public void setTiposCadastro(Map<String, String> tiposCadastro) {
+		this.tiposCadastro = tiposCadastro;
+	}
+
+	public String getEspecialidade() {
+		return especialidade;
+	}
+
+	public void setEspecialidade(String especialidade) {
+		this.especialidade = especialidade;
+	}
+
+	public String getMatricula() {
+		return matricula;
+	}
+
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
+	}
+
+	public boolean isExibirCrm() {
+		return exibirCrm;
+	}
+
+	public void setExibirCrm(boolean exibirCrm) {
+		this.exibirCrm = exibirCrm;
+	}
+
+	public boolean isExibirMatricula() {
+		return exibirMatricula;
+	}
+
+	public void setExibirMatricula(boolean exibirMatricula) {
+		this.exibirMatricula = exibirMatricula;
+	}
+
+	public boolean isExibirEspecialidade() {
+		return exibirEspecialidade;
+	}
+
+	public void setExibirEspecialidade(boolean exibirEspecialidade) {
+		this.exibirEspecialidade = exibirEspecialidade;
+	}
+
 }
+

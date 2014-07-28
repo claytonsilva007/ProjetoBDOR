@@ -1,5 +1,6 @@
 package classesbasicas;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class Paciente {
@@ -7,13 +8,14 @@ public class Paciente {
 	private String idPaciente;
 	private String cpf;
 	private String estadoCivil;
-	private char sexo;
+	private String sexo;
 	private ArrayList<Endereco> listaDeEnderecos;
 	private ArrayList<Telefone> telefones;
-	private byte[] foto;
+	private InputStream foto;
 	private String nome;
 	private Endereco endereco;
 	private Telefone telefone;
+	private String numTelefone;
 	
 	public Paciente() {
 		
@@ -37,10 +39,10 @@ public class Paciente {
 	public void setEstadoCivil(String estadoCivil) {
 		this.estadoCivil = estadoCivil;
 	}
-	public char getSexo() {
+	public String getSexo() {
 		return sexo;
 	}
-	public void setSexo(char sexo) {
+	public void setSexo(String sexo) {
 		this.sexo = sexo;
 	}
 	public ArrayList<Endereco> getListaDeEnderecos() {
@@ -85,11 +87,19 @@ public class Paciente {
 		this.telefone = telefone;
 	}
 
-	public byte[] getFoto() {
+	public InputStream getFoto() {
 		return foto;
 	}
 
-	public void setFoto(byte[] foto) {
+	public void setFoto(InputStream foto) {
 		this.foto = foto;
+	}
+
+	public String getNumTelefone() {
+		return numTelefone;
+	}
+
+	public void setNumTelefone(String numTelefone) {
+		this.numTelefone = numTelefone;
 	}
 }

@@ -12,7 +12,16 @@
 	<f:view>
 		<p:tooltip />
 		<h:form id="formPaciente">
-<!-- 			<h:panelGrid columns="2" id="gridPrincipal">
+			<h:panelGrid columns="2" id="gridPrincipal">
+				<p:outputLabel id="advanced" value="Selecione o tipo de cadastro: " />
+				<p:selectOneMenu id="city"
+					value="#{pacienteBean.tipoCadastroSelecionado}" effect="fold"
+					editable="true" onchange="#{beanControlador.exibirEspecialidade}">
+					<f:selectItems value="#{beanControlador.tiposCadastro}" />
+					<p:ajax update="formPaciente" event="change"
+						listener="#{pacienteBean.renderizarComponentes}"
+						immediate="true" />
+				</p:selectOneMenu>
 				<p:outputLabel id="idNome" value="Nome" />
 				<p:inputText id="idInputNome" size="40" maxlength="50"
 					value="#{pacienteBean.nome}" required="true" />
@@ -22,6 +31,19 @@
 					value="#{pacienteBean.cpf}">
 					<f:convertNumber integerOnly="true" />
 				</p:inputText>
+
+				<p:outputLabel id="idcrm" value="CRM"
+					rendered="#{beanControlador.exibirCrm}" autoUpdate="true" />
+				<p:inputText id="idInputCRM" size="15" maxlength="15"
+					value="#{beanControlador.crm}" required="true"
+					rendered="#{beanControlador.exibirCrm}" autoUpdate="true" />
+
+				<p:outputLabel id="idEspecialidade" value="Especialidade Médica"
+					rendered="#{beanControlador.exibirCrm}" autoUpdate="true" />
+				<p:inputText id="idInputEspecialidade" size="25" maxlength="25"
+					value="#{beanControlador.exibirCrm}" required="true"
+					rendered="#{beanControlador.exibirCrm}" autoUpdate="true" />
+
 				<p:outputLabel for="popup" value="Data Nasc." />
 				<p:calendar id="popup" size="11" maxlength="10" required="true"
 					value="#{pacienteBean.dataNasc}" />
@@ -39,46 +61,63 @@
 
 			<p:panelGrid id="gridcolunas" columns="4">
 				<p:outputLabel id="labelEndereco" value="Endereco*: " />
-				<p:inputText id="inputEndereco" value="#{pacienteBean.logradouro}" required="true" maxlength="150" size="80"/>
-				
-				<p:outputLabel id="labelComplemento" value="Complemento: " />
-				<p:inputText id="inputComplemento" value="#{pacienteBean.complemento}" maxlength="5"/>
-				
+				<p:inputText id="inputEndereco" value="#{pacienteBean.logradouro}"
+					required="true" maxlength="150" size="70" />
+
+				<h:panelGroup id="groupNumero">
+					<p:outputLabel id="labelNumero" value="Núm.: " />
+					<p:inputText id="inputNumero" value="#{pacienteBean.numero}"
+						maxlength="5" size="5" />
+				</h:panelGroup>
+
+				<h:panelGroup id="groupComplemento">
+					<p:outputLabel id="labelComplemento" value="Complemento: " />
+					<p:inputText id="inputComplemento"
+						value="#{pacienteBean.complemento}" maxlength="5" size="8" />
+				</h:panelGroup>
+
 				<p:outputLabel id="labelCidade" value="Cidade*: " />
-				<p:inputText id="inputCidade" value="#{pacienteBean.cidade}" required="true" maxlength="50" size="40"/>
-				
+				<p:inputText id="inputCidade" value="#{pacienteBean.cidade}"
+					required="true" maxlength="50" size="40" />
+
 				<p:outputLabel id="labelBairro" value="Bairro*: " />
-				<p:inputText id="inputBairro" value="#{pacienteBean.bairro}" required="true" maxlength="50" size="40"/>
-				
+				<p:inputText id="inputBairro" value="#{pacienteBean.bairro}"
+					required="true" maxlength="50" size="40" />
+
 				<p:outputLabel id="labelCep" value="CEP: " />
-				<p:inputText id="inputCep" value="#{pacienteBean.cep}" maxlength="7"> 
-					<f:convertNumber integerOnly="true"/>
-				</p:inputText>
-				
-				<p:outputLabel id="labelEstado" value="Estado*: " />
-				<p:inputText id="inputEstado" value="#{pacienteBean.estado}" required="true"/>
-				
-				<p:outputLabel id="idLabelResidencialDDD" value="DDD*: " />
-				<p:inputText id="inputDDDFixo" size="2" maxlength="2" required="true" value="#{pacienteBean.ddd}">
+				<p:inputText id="inputCep" value="#{pacienteBean.cep}" maxlength="7">
 					<f:convertNumber integerOnly="true" />
 				</p:inputText>
-				
+
+				<p:outputLabel id="labelEstado" value="Estado*: " />
+				<p:inputText id="inputEstado" value="#{pacienteBean.estado}"
+					required="true" />
+
+				<p:outputLabel id="idLabelResidencialDDD" value="DDD*: " />
+				<p:inputText id="inputDDDFixo" size="2" maxlength="2"
+					required="true" value="#{pacienteBean.ddd}">
+					<f:convertNumber integerOnly="true" />
+				</p:inputText>
+
 				<p:outputLabel id="idLabelFoneRes" value="Fone*: " />
-				<p:inputText value="#{pacienteBean.numTel}" size="8" maxlength="8" required="true">
+				<p:inputText value="#{pacienteBean.numTel}" size="8" maxlength="8"
+					required="true">
 					<f:convertNumber integerOnly="true" />
 				</p:inputText>
 			</p:panelGrid>
-		 -->
+
 			<!--COMPONENTE DE FOTOS -->
 
 			<h:panelGrid columns="3" cellpadding="5">
-				<p:photoCam widgetVar="pc" listener="#{photoCamView.oncapture}" update="photo" />
-				<p:commandButton type="button" value="Capture" onclick="PF('pc').capture()" />
-				<p:graphicImage id="photo" name="demo/images/photocam/#{photoCamView.filename}.png" />
+				<p:photoCam widgetVar="pc" listener="#{pacienteBean.oncapture}"
+					update="photo" />
+				<p:commandButton type="button" value="Capture"
+					onclick="PF('pc').capture()" />
+				<p:graphicImage id="photo" name="foto.png" />
 			</h:panelGrid>
 
 			<p:commandButton value="Cadastrar" id="ajax"
-				actionListener="#{pacienteBean.cadastrarPaciente}" ajax="true"
+				action="#{pacienteBean.cadastrarPaciente}" ajax="true"
 				process="@form" update="formPaciente" />
 
 			<p:messages id="mensagens" showDetail="true" showSummary="true"
@@ -87,6 +126,14 @@
 	</f:view>
 </h:body>
 </html>
+
+
+
+
+
+
+
+
 
 
 
