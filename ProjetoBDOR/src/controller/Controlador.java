@@ -30,5 +30,7 @@ public class Controlador {
 	
 	public void cadastrarPaciente(Paciente paciente){
 		this.repositorioPaciente.cadastrarPaciente(paciente);
+		
 	}
+	
 }

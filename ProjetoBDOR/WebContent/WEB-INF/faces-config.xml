@@ -7,13 +7,6 @@
 	<managed-bean>
 		<managed-bean-name>pacienteBean</managed-bean-name>
 		<managed-bean-class>beans.PacienteBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
+		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-
-	<managed-bean>
-		<managed-bean-name>photoCamViewBean</managed-bean-name>
-		<managed-bean-class>beans.PhotoCamView</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-
 </faces-config>

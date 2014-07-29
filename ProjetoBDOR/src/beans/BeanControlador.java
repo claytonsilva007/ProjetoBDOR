@@ -1,4 +1,4 @@
-package beans;
+/*package beans;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -442,3 +442,4 @@ public class BeanControlador {
 
 }
 
+*/

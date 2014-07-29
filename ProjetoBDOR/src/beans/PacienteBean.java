@@ -1,7 +1,6 @@
 package beans;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -53,6 +52,7 @@ public class PacienteBean {
 
 	private String tipoCadastroSelecionado;  
 	private Map<String,String> tiposCadastro = new HashMap<String, String>();
+	private ByteArrayInputStream foto;
 	
 	public PacienteBean(){
 		tiposCadastro = new HashMap<String, String>();
@@ -109,6 +109,7 @@ public class PacienteBean {
 		this.endereco.setEstado(this.estado);
 		this.endereco.setLogradouro(this.logradouro);
 		this.paciente.setEndereco(endereco);
+		this.paciente.setFoto(foto);
 		
 		Controlador.getcontrolador().cadastrarPaciente(paciente);
 	}
@@ -180,9 +181,7 @@ public class PacienteBean {
 	public void oncapture(CaptureEvent captureEvent) {
         
         byte[] data = captureEvent.getData();
-        InputStream in = new ByteArrayInputStream(data);
-        
-        //Controlador.getcontrolador().cadastrarFoto(in);
+        this.foto = new ByteArrayInputStream(data);
 	}
 	
 	public void alterarPaciente(Paciente paciente){
@@ -446,5 +445,13 @@ public class PacienteBean {
 
 	public void setTel(Telefone tel) {
 		this.tel = tel;
+	}
+
+	public ByteArrayInputStream getFoto() {
+		return foto;
+	}
+
+	public void setFoto(ByteArrayInputStream foto) {
+		this.foto = foto;
 	}	
 }

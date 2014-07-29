@@ -7,8 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import org.apache.tomcat.dbcp.dbcp.ConnectionFactory;
-
 import util.FabricaDeConexoes;
 import classesbasicas.Paciente;
 import classesbasicas.Pessoa;
@@ -16,6 +14,7 @@ import classesbasicas.Pessoa;
 public class RepositorioPacienteBDR implements InterfacePaciente{
 
 	public void cadastrarPaciente(Paciente paciente) {
+
 		Connection conexao = null;
 		PreparedStatement stmt = null;
 		StringBuffer sbi = new StringBuffer();
@@ -80,7 +79,7 @@ public class RepositorioPacienteBDR implements InterfacePaciente{
 			stmt.setString(i++, paciente.getSexo());
 			stmt.setString(i++, paciente.getTelefone().getNumero()); //verificar a inserção de mais de um número de telefones
 			stmt.setNull(i++, java.sql.Types.VARCHAR); //fixo
-			stmt.setNull(i++, java.sql.Types.BLOB); //foto
+			stmt.setBinaryStream(i++, paciente.getFoto()); //foto
 			stmt.setString(i++, paciente.getConvenio());
 
 			stmt.executeUpdate();
@@ -92,14 +91,14 @@ public class RepositorioPacienteBDR implements InterfacePaciente{
 		}finally{
 			try {
 				stmt.close();
-				this.inserirImagem(paciente.getFoto(), paciente.getCpf());
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
-	public void inserirImagem(InputStream foto, String cpf){
+	public void inserirImagem(InputStream foto, Paciente paciente){
+		
 		Connection conexao = null;
 		PreparedStatement stmt = null;
 
@@ -107,12 +106,14 @@ public class RepositorioPacienteBDR implements InterfacePaciente{
 			conexao = FabricaDeConexoes.getConnection();
 			StringBuffer sbi = new StringBuffer();
 			
-			sbi.append("INSERT INTO TB_PACIENTE (foto) VALUES (?) WHERE cpf = ?");
+			sbi.append("INSERT INTO TB_PACIENTE(seq_idPaciente.NEXTVAL, cpf, foto) VALUES(?,?)");
 			
 			stmt = conexao.prepareStatement(sbi.toString());
-			stmt.setBinaryStream(1, foto);
-			stmt.setString(2, cpf);
+			
+			stmt.setString(1, paciente.getCpf());
+			stmt.setBinaryStream(2, foto);
 			stmt.executeUpdate();
+			
 		}
 		catch (ClassNotFoundException e) {
 			e.printStackTrace();
