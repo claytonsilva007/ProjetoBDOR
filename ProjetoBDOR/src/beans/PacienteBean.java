@@ -7,11 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-
-
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
@@ -19,14 +15,15 @@ import org.primefaces.event.CaptureEvent;
 
 import util.ValidaCPF;
 import classesbasicas.Endereco;
+import classesbasicas.Funcionario;
+import classesbasicas.Medico;
 import classesbasicas.Paciente;
 import classesbasicas.Telefone;
 import controller.Controlador;
 
-@ManagedBean(name="pacienteBean")
-@SessionScoped
 public class PacienteBean {
-
+	private String convenio;
+	private String idPaciente;
 	private String cpf;
 	private String estadoCivil;
 	private String sexo;
@@ -34,7 +31,6 @@ public class PacienteBean {
 	private String telefone;
 	private String ddd;
 	private String numTel;
-	private ArrayList<Telefone> listaDeTelefones;
 	private String nome;
 	private Date dataNasc;
 	private Endereco endereco;
@@ -44,59 +40,39 @@ public class PacienteBean {
 	private String complemento;
 	private String cep;
 	private String estado;
-	private int numero;
-	private InputStream foto;
-	
 	private Paciente paciente;
-	
+	private Medico medico;
+	private Funcionario funcionario;
+	private Telefone tel;
+	private String crm;
+	private String especialidade;
+	private String matricula;
+
+	private boolean exibirCrm = false;
+	private boolean exibirMatricula = false;
+
 	private String tipoCadastroSelecionado;  
 	private Map<String,String> tiposCadastro = new HashMap<String, String>();
 	
-	public PacienteBean() {
-		/*this.exibirCrm = false;
-		this.exibirEspecialidade = false;
-		this.exibirMatricula = false;*/
-
+	public PacienteBean(){
 		tiposCadastro = new HashMap<String, String>();
 		tiposCadastro.put(" ", " ");
 		tiposCadastro.put("Paciente", "Paciente");
 		tiposCadastro.put("Medico","Medico");
 		tiposCadastro.put("Atendente","Atendente");
 	}
-
-	public void cadastrarPaciente(ActionEvent event) {
+	
+	public void cadastrar(ActionEvent event) {
 		if(this.preencheuCamposObrigatorios()){
-			
-			Paciente paciente = new Paciente(); 
-			Endereco endereco = new Endereco();
-			
-			//paciente.setConvenio(this.convenio);
-			paciente.setCpf(this.cpf);
-			paciente.setEstadoCivil(this.estadoCivil);
-			//paciente.setIdPaciente(this.idPaciente);
-			paciente.setNome(this.nome);
-			paciente.setSexo(this.sexo);
-			paciente.setFoto(this.foto);
-			paciente.setListaDeEnderecos(this.listaDeEnderecos);
-			this.setTelefone(this.ddd + this.numTel);
-			paciente.setTelefones(this.listaDeTelefones);
-			paciente.setNumTelefone(this.telefone);
-			endereco.setBairro(this.bairro);
-			endereco.setCep(this.cep);
-			endereco.setCidade(this.cidade);
-			endereco.setComplemento(this.complemento);
-			endereco.setEstado(this.estado);
-			endereco.setLogradouro(this.logradouro);
-			endereco.setNumero(this.numero);
-			
-			paciente.setEndereco(endereco);
-			
-			Controlador.getcontrolador().cadastrarPaciente(paciente);
-		
+			if(this.tipoCadastroSelecionado.equalsIgnoreCase("Paciente")){
+				this.cadastrarPaciente();
+			}else if(this.tipoCadastroSelecionado.equalsIgnoreCase("Medico")){
+				this.cadastrarMedico();
+			}else if(this.tipoCadastroSelecionado.equalsIgnoreCase("Funcionario")){
+				this.cadastrarFuncionario();
+			}
 		} else {
-			
 			boolean cpfInvalido = ValidaCPF.validar(this.cpf); 
-			
 			if(cpfInvalido){
 				FacesContext.getCurrentInstance().addMessage(
 						null,
@@ -109,6 +85,104 @@ public class PacienteBean {
 								"CPF inválido!"));
 			}
 		}
+	}
+	
+	public void cadastrarPaciente(){
+		
+		this.paciente = new Paciente();
+		this.endereco = new Endereco();
+		this.tel = new Telefone();
+		this.paciente.setConvenio(this.convenio);
+		this.paciente.setCpf(this.cpf);
+		this.paciente.setEstadoCivil(this.estadoCivil);
+		this.paciente.setNome(this.nome);
+		this.paciente.setSexo(this.sexo);
+		this.paciente.setListaDeEnderecos(this.listaDeEnderecos);
+		this.tel.setDdd(this.ddd);
+		this.tel.setNumero(this.telefone);
+		this.tel.adicionarTelefone(tel);
+		this.paciente.setTelefone(tel);
+		this.endereco.setBairro(this.bairro);
+		this.endereco.setCep(this.cep);
+		this.endereco.setCidade(this.cidade);
+		this.endereco.setComplemento(this.complemento);
+		this.endereco.setEstado(this.estado);
+		this.endereco.setLogradouro(this.logradouro);
+		this.paciente.setEndereco(endereco);
+		
+		Controlador.getcontrolador().cadastrarPaciente(paciente);
+	}
+	
+	public void cadastrarMedico(){
+		this.medico = new Medico();
+		this.endereco = new Endereco();
+		this.tel = new Telefone();
+		
+		this.medico.setCpf(this.cpf);
+		this.medico.setEstadoCivil(this.estadoCivil);
+		this.medico.setNome(this.nome);
+		this.medico.setSexo(this.sexo);
+		this.medico.setListaDeEnderecos(this.listaDeEnderecos);
+		this.tel.setDdd(this.ddd);
+		this.tel.setNumero(this.telefone);
+		this.tel.adicionarTelefone(tel);
+		this.medico.setTelefone(tel);
+		
+		this.endereco.setBairro(this.bairro);
+		this.endereco.setCep(this.cep);
+		this.endereco.setCidade(this.cidade);
+		this.endereco.setComplemento(this.complemento);
+		this.endereco.setEstado(this.estado);
+		this.endereco.setLogradouro(this.logradouro);
+		this.medico.setEndereco(endereco);
+		this.medico.setEspecialidade(this.especialidade);
+		
+		//Controlador.getcontrolador().cadastrarPaciente(paciente);
+	}
+	
+	public void cadastrarFuncionario(){
+		this.tel = new Telefone();
+		this.funcionario = new Funcionario();
+		this.funcionario.setCpf(this.cpf);
+		this.funcionario.setEstadoCivil(this.estadoCivil);
+		this.funcionario.setNome(this.nome);
+		this.funcionario.setSexo(this.sexo);
+		this.tel.setDdd(this.ddd);
+		this.tel.setNumero(this.telefone);
+		this.tel.adicionarTelefone(tel);
+		this.funcionario.setTelefone(tel);
+		this.funcionario.setListaDeEnderecos(this.listaDeEnderecos);
+		this.endereco.setBairro(this.bairro);
+		this.endereco.setCep(this.cep);
+		this.endereco.setCidade(this.cidade);
+		this.endereco.setComplemento(this.complemento);
+		this.endereco.setEstado(this.estado);
+		this.endereco.setLogradouro(this.logradouro);
+		this.funcionario.setEndereco(endereco);
+		
+		//Controlador.getcontrolador().cadastrarPaciente(paciente);
+		
+	}
+	
+	public void renderizarComponentes(){
+		if(this.tipoCadastroSelecionado.equalsIgnoreCase("Medico")){
+			this.exibirCrm = true;
+			this.exibirMatricula = false;
+		}else if(this.tipoCadastroSelecionado.equalsIgnoreCase("Atendente")){
+			this.exibirCrm = false;
+			this.exibirMatricula = true;
+		} else{
+			this.exibirCrm = false;
+			this.exibirMatricula = false;
+		}
+	}
+	
+	public void oncapture(CaptureEvent captureEvent) {
+        
+        byte[] data = captureEvent.getData();
+        InputStream in = new ByteArrayInputStream(data);
+        
+        //Controlador.getcontrolador().cadastrarFoto(in);
 	}
 	
 	public void alterarPaciente(Paciente paciente){
@@ -132,7 +206,8 @@ public class PacienteBean {
 				&&(this.cidade != null)
 				&& (this.estado != null)
 				&& (this.ddd != null)
-				&& (this.numTel != null)){
+				&& (this.numTel != null)
+				&& (!this.tipoCadastroSelecionado.equalsIgnoreCase(""))){
 
 			preencheu = true;
 		} 
@@ -152,18 +227,7 @@ public class PacienteBean {
 		//falta implementar
 	}
 
-	public void oncapture(CaptureEvent captureEvent) {
-        byte[] data = captureEvent.getData();
-        InputStream in = new ByteArrayInputStream(data);
-        this.foto = in;
-    }
-	
-	public InputStream consultarImagem(int id){
-		InputStream blob = Controlador.getcontrolador().consultarImagem(id);
-		return blob;
-	}
-	
-	/*public String getConvenio() {
+	public String getConvenio() {
 		return convenio;
 	}
 
@@ -177,7 +241,7 @@ public class PacienteBean {
 
 	public void setIdPaciente(String idPaciente) {
 		this.idPaciente = idPaciente;
-	}*/
+	}
 
 	public String getCpf() {
 		return cpf;
@@ -195,28 +259,12 @@ public class PacienteBean {
 		this.estadoCivil = estadoCivil;
 	}
 
-	public String getSexo() {
-		return sexo;
-	}
-
-	public void setSexo(String sexo) {
-		this.sexo = sexo;
-	}
-
 	public ArrayList<Endereco> getListaDeEnderecos() {
 		return listaDeEnderecos;
 	}
 
 	public void setListaDeEnderecos(ArrayList<Endereco> listaDeEnderecos) {
 		this.listaDeEnderecos = listaDeEnderecos;
-	}
-
-	public ArrayList<Telefone> getListaDeTelefones() {
-		return listaDeTelefones;
-	}
-
-	public void setListaDeTelefones(ArrayList<Telefone> telefones) {
-		this.listaDeTelefones = telefones;
 	}
 
 	public String getNome() {
@@ -312,19 +360,91 @@ public class PacienteBean {
 		this.paciente = paciente;
 	}
 
-	public int getNumero() {
-		return numero;
+	public String getCrm() {
+		return crm;
 	}
 
-	public void setNumero(int numero) {
-		this.numero = numero;
+	public void setCrm(String crm) {
+		this.crm = crm;
 	}
 
-	public InputStream getFoto() {
-		return foto;
+	public String getEspecialidade() {
+		return especialidade;
 	}
 
-	public void setFoto(InputStream foto) {
-		this.foto = foto;
+	public void setEspecialidade(String especialidade) {
+		this.especialidade = especialidade;
+	}
+
+	public String getMatricula() {
+		return matricula;
+	}
+
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
+	}
+
+	public boolean isExibirCrm() {
+		return exibirCrm;
+	}
+
+	public void setExibirCrm(boolean exibirCrm) {
+		this.exibirCrm = exibirCrm;
+	}
+
+	public boolean isExibirMatricula() {
+		return exibirMatricula;
+	}
+
+	public void setExibirMatricula(boolean exibirMatricula) {
+		this.exibirMatricula = exibirMatricula;
+	}
+
+	public String getTipoCadastroSelecionado() {
+		return tipoCadastroSelecionado;
+	}
+
+	public void setTipoCadastroSelecionado(String tipoCadastroSelecionado) {
+		this.tipoCadastroSelecionado = tipoCadastroSelecionado;
+	}
+
+	public Map<String, String> getTiposCadastro() {
+		return tiposCadastro;
+	}
+
+	public void setTiposCadastro(Map<String, String> tiposCadastro) {
+		this.tiposCadastro = tiposCadastro;
+	}
+
+	public Medico getMedico() {
+		return medico;
+	}
+
+	public void setMedico(Medico medico) {
+		this.medico = medico;
+	}
+
+	public Funcionario getFuncionario() {
+		return funcionario;
+	}
+
+	public void setFuncionario(Funcionario funcionario) {
+		this.funcionario = funcionario;
+	}
+
+	public String getSexo() {
+		return sexo;
+	}
+
+	public void setSexo(String sexo) {
+		this.sexo = sexo;
+	}
+
+	public Telefone getTel() {
+		return tel;
+	}
+
+	public void setTel(Telefone tel) {
+		this.tel = tel;
 	}	
 }

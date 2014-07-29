@@ -15,10 +15,14 @@ public class Paciente {
 	private String nome;
 	private Endereco endereco;
 	private Telefone telefone;
-	private String numTelefone;
+	private String numeroTelefone;
 	
 	public Paciente() {
-		
+		this.telefones = new ArrayList<Telefone>();
+	}
+	
+	public void adicionarTelefone(Telefone telefone){
+		this.telefones.add(telefone);
 	}
 			
 	public String getCpf() {
@@ -93,13 +97,5 @@ public class Paciente {
 
 	public void setFoto(InputStream foto) {
 		this.foto = foto;
-	}
-
-	public String getNumTelefone() {
-		return numTelefone;
-	}
-
-	public void setNumTelefone(String numTelefone) {
-		this.numTelefone = numTelefone;
 	}
 }

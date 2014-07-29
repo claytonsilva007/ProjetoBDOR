@@ -1,11 +1,16 @@
 package beans;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Blob;
 
+import javax.faces.FacesException;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.imageio.stream.FileImageOutputStream;
+import javax.servlet.ServletContext;
 
 import org.primefaces.event.CaptureEvent;
 
@@ -16,12 +21,7 @@ import controller.Controlador;
 public class PhotoCamView {
      
     private String filename;
-    private Blob blob;
-    
-    public PhotoCamView(){
-    	//this.blob = this.consultarImagem(1);
-    }
-    
+     
     private String getRandomImageName() {
         int i = (int) (Math.random() * 10000000);
          
@@ -38,24 +38,6 @@ public class PhotoCamView {
         byte[] data = captureEvent.getData();
         InputStream in = new ByteArrayInputStream(data);
         
-        //Controlador.getcontrolador().cadastrarFoto(in);
+        Controlador.getcontrolador().cadastrarFoto(in);
     }
-    
-    public InputStream consultarImagem(int id){
-    	InputStream blob = Controlador.getcontrolador().consultarImagem(id);
-		return blob;
-    }
-
-	public Blob getBlob() {
-		return blob;
-	}
-
-	public void setBlob(Blob blob) {
-		this.blob = blob;
-	}
-
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
-    
 }

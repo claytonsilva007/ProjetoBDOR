@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import util.ConnectionFactory;
+import org.apache.tomcat.dbcp.dbcp.ConnectionFactory;
+
+import util.FabricaDeConexoes;
 import classesbasicas.Paciente;
 import classesbasicas.Pessoa;
 
@@ -60,7 +62,7 @@ public class RepositorioPacienteBDR implements InterfacePaciente{
 		int i = 1;
 		
 		try {
-			conexao = ConnectionFactory.getConnection();
+			conexao = FabricaDeConexoes.getConnection();
 
 			stmt = conexao.prepareStatement(sbi.toString());
 			
@@ -76,7 +78,7 @@ public class RepositorioPacienteBDR implements InterfacePaciente{
 			stmt.setString(i++, paciente.getEndereco().getCep());
 			stmt.setString(i++, "Brasil");
 			stmt.setString(i++, paciente.getSexo());
-			stmt.setString(i++, paciente.getNumTelefone()); //verificar a inserção de mais de um número de telefones
+			stmt.setString(i++, paciente.getTelefone().getNumero()); //verificar a inserção de mais de um número de telefones
 			stmt.setNull(i++, java.sql.Types.VARCHAR); //fixo
 			stmt.setNull(i++, java.sql.Types.BLOB); //foto
 			stmt.setString(i++, paciente.getConvenio());
@@ -90,7 +92,7 @@ public class RepositorioPacienteBDR implements InterfacePaciente{
 		}finally{
 			try {
 				stmt.close();
-				//this.inserirImagem(paciente.getFoto(), paciente.getCpf());
+				this.inserirImagem(paciente.getFoto(), paciente.getCpf());
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -102,7 +104,7 @@ public class RepositorioPacienteBDR implements InterfacePaciente{
 		PreparedStatement stmt = null;
 
 		try {
-			conexao = ConnectionFactory.getConnection();
+			conexao = FabricaDeConexoes.getConnection();
 			StringBuffer sbi = new StringBuffer();
 			
 			sbi.append("INSERT INTO TB_PACIENTE (foto) VALUES (?) WHERE cpf = ?");
@@ -133,7 +135,7 @@ public class RepositorioPacienteBDR implements InterfacePaciente{
 		InputStream blob = null;
 
 		try {
-			conexao = ConnectionFactory.getConnection();
+			conexao = FabricaDeConexoes.getConnection();
 			stmt = conexao.prepareStatement("SELECT foto FROM foto WHERE id = ?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();

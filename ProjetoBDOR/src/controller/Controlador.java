@@ -5,6 +5,7 @@ import java.io.InputStream;
 import persistense.RepositorioPacienteBDR;
 import classesbasicas.Paciente;
 
+
 public class Controlador {
 	private RepositorioPacienteBDR repositorioPaciente; 
 	private static Controlador controlador;
@@ -29,13 +30,5 @@ public class Controlador {
 	
 	public void cadastrarPaciente(Paciente paciente){
 		this.repositorioPaciente.cadastrarPaciente(paciente);
-	}
-	/*public void cadastrarFoto(InputStream data){
-		this.repositorioPaciente.inserirFoto(data);
-	}*/
-	
-	public InputStream consultarImagem(int id){
-		InputStream blob = this.repositorioPaciente.consultarImagem(id);
-		return blob;
 	}
 }
