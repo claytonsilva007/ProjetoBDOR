@@ -2,6 +2,7 @@ package classesbasicas;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Paciente {
 	private String convenio;
@@ -16,6 +17,7 @@ public class Paciente {
 	private Endereco endereco;
 	private Telefone telefone;
 	private String numeroTelefone;
+	private Date DataNasc;
 	
 	public Paciente() {
 		this.telefones = new ArrayList<Telefone>();
@@ -97,5 +99,21 @@ public class Paciente {
 
 	public void setFoto(InputStream foto) {
 		this.foto = foto;
+	}
+
+	public String getNumeroTelefone() {
+		return numeroTelefone;
+	}
+
+	public void setNumeroTelefone(String numeroTelefone) {
+		this.numeroTelefone = numeroTelefone;
+	}
+
+	public Date getDataNasc() {
+		return DataNasc;
+	}
+
+	public void setDataNasc(Date dataNasc) {
+		DataNasc = dataNasc;
 	}
 }

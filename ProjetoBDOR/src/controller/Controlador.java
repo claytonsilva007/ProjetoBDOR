@@ -30,7 +30,9 @@ public class Controlador {
 	
 	public void cadastrarPaciente(Paciente paciente){
 		this.repositorioPaciente.cadastrarPaciente(paciente);
-		
 	}
 	
+	public Paciente consultarPaciente(String cpf){
+		return this.repositorioPaciente.consultarPaciente(cpf);
+	}
 }

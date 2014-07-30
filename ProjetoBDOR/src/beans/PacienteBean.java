@@ -11,6 +11,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import org.primefaces.event.CaptureEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 import util.ValidaCPF;
 import classesbasicas.Endereco;
@@ -24,7 +26,8 @@ public class PacienteBean {
 	private String convenio;
 	private String idPaciente;
 	private String cpf;
-	private String estadoCivil;
+	private String estadoCivilSelecionado;
+	private Map<String,String> tiposEstadosCivis = new HashMap<String, String>();
 	private String sexo;
 	private ArrayList<Endereco> listaDeEnderecos;
 	private String telefone;
@@ -46,13 +49,16 @@ public class PacienteBean {
 	private String crm;
 	private String especialidade;
 	private String matricula;
-
 	private boolean exibirCrm = false;
 	private boolean exibirMatricula = false;
-
 	private String tipoCadastroSelecionado;  
 	private Map<String,String> tiposCadastro = new HashMap<String, String>();
 	private ByteArrayInputStream foto;
+	private byte[] fotoExibicao;
+	private StreamedContent imagem;
+	private ArrayList<StreamedContent> fotos = new ArrayList<StreamedContent>();
+	private String cpfChaveBusca;
+	private boolean exibirCampoDeConsulta = true;
 	
 	public PacienteBean(){
 		tiposCadastro = new HashMap<String, String>();
@@ -60,6 +66,12 @@ public class PacienteBean {
 		tiposCadastro.put("Paciente", "Paciente");
 		tiposCadastro.put("Medico","Medico");
 		tiposCadastro.put("Atendente","Atendente");
+		
+		this.tiposEstadosCivis.put("", "");
+		this.tiposEstadosCivis.put("Casado", "Casado");
+		this.tiposEstadosCivis.put("Solteiro", "Solteriro");
+		this.tiposEstadosCivis.put("Divorciado", "Divorciado");
+		this.tiposEstadosCivis.put("Outros", "Outros");
 	}
 	
 	public void cadastrar(ActionEvent event) {
@@ -94,9 +106,10 @@ public class PacienteBean {
 		this.tel = new Telefone();
 		this.paciente.setConvenio(this.convenio);
 		this.paciente.setCpf(this.cpf);
-		this.paciente.setEstadoCivil(this.estadoCivil);
+		this.paciente.setEstadoCivil(this.estadoCivilSelecionado);
 		this.paciente.setNome(this.nome);
 		this.paciente.setSexo(this.sexo);
+		this.paciente.setEstadoCivil(this.estadoCivilSelecionado);
 		this.paciente.setListaDeEnderecos(this.listaDeEnderecos);
 		this.tel.setDdd(this.ddd);
 		this.tel.setNumero(this.telefone);
@@ -114,13 +127,47 @@ public class PacienteBean {
 		Controlador.getcontrolador().cadastrarPaciente(paciente);
 	}
 	
+	public void consultarPaciente(ActionEvent event){
+		
+		this.paciente = null;
+		
+		if(!this.cpfChaveBusca.equalsIgnoreCase("")){
+
+			this.paciente = Controlador.getcontrolador().consultarPaciente(this.cpfChaveBusca);
+			this.nome = paciente.getNome();
+			this.sexo = paciente.getSexo();
+			this.estadoCivilSelecionado = paciente.getEstadoCivil();
+			this.convenio = paciente.getConvenio();
+			//this.bairro = paciente.getEndereco().getBairro();
+			//this.cep = paciente.getEndereco().getCep();
+			//this.cidade = paciente.getEndereco().getCidade();
+			//this.complemento = paciente.getEndereco().getComplemento();
+			//this.convenio = paciente.getConvenio();
+			this.cpf = paciente.getCpf();
+			this.dataNasc = paciente.getDataNasc();
+			//this.ddd = paciente.getTelefone().getDdd();
+			//this.numTel = paciente.getTelefone().getNumero();
+				if(paciente.getFoto() != null){
+					imagem = new DefaultStreamedContent(paciente.getFoto(), "image/jpg", "foto");
+					this.fotos.add(imagem);
+				} else {
+					System.out.println("Nenhuma foto carregada!");
+				}
+				
+			this.renderizarResultadoConsulta();
+				
+		}else{
+			//colocar a mensagem do faceContext
+		}
+	}
+
 	public void cadastrarMedico(){
 		this.medico = new Medico();
 		this.endereco = new Endereco();
 		this.tel = new Telefone();
 		
 		this.medico.setCpf(this.cpf);
-		this.medico.setEstadoCivil(this.estadoCivil);
+		this.medico.setEstadoCivil(this.estadoCivilSelecionado);
 		this.medico.setNome(this.nome);
 		this.medico.setSexo(this.sexo);
 		this.medico.setListaDeEnderecos(this.listaDeEnderecos);
@@ -145,7 +192,7 @@ public class PacienteBean {
 		this.tel = new Telefone();
 		this.funcionario = new Funcionario();
 		this.funcionario.setCpf(this.cpf);
-		this.funcionario.setEstadoCivil(this.estadoCivil);
+		this.funcionario.setEstadoCivil(this.estadoCivilSelecionado);
 		this.funcionario.setNome(this.nome);
 		this.funcionario.setSexo(this.sexo);
 		this.tel.setDdd(this.ddd);
@@ -176,6 +223,10 @@ public class PacienteBean {
 			this.exibirCrm = false;
 			this.exibirMatricula = false;
 		}
+	}
+	
+	public void renderizarResultadoConsulta(){
+		this.exibirCampoDeConsulta = false;
 	}
 	
 	public void oncapture(CaptureEvent captureEvent) {
@@ -210,6 +261,7 @@ public class PacienteBean {
 
 			preencheu = true;
 		} 
+		
 		return preencheu;
 	}
 	
@@ -251,11 +303,11 @@ public class PacienteBean {
 	}
 
 	public String getEstadoCivil() {
-		return estadoCivil;
+		return estadoCivilSelecionado;
 	}
 
 	public void setEstadoCivil(String estadoCivil) {
-		this.estadoCivil = estadoCivil;
+		this.estadoCivilSelecionado = estadoCivil;
 	}
 
 	public ArrayList<Endereco> getListaDeEnderecos() {
@@ -453,5 +505,61 @@ public class PacienteBean {
 
 	public void setFoto(ByteArrayInputStream foto) {
 		this.foto = foto;
-	}	
+	}
+
+	public String getEstadoCivilSelecionado() {
+		return estadoCivilSelecionado;
+	}
+
+	public void setEstadoCivilSelecionado(String estadoCivilSelecionado) {
+		this.estadoCivilSelecionado = estadoCivilSelecionado;
+	}
+
+	public Map<String, String> getTiposEstadosCivis() {
+		return tiposEstadosCivis;
+	}
+
+	public void setTiposEstadosCivis(Map<String, String> tiposEstadosCivis) {
+		this.tiposEstadosCivis = tiposEstadosCivis;
+	}
+
+	public byte[] getFotoExibicao() {
+		return fotoExibicao;
+	}
+
+	public void setFotoExibicao(byte[] fotoExibicao) {
+		this.fotoExibicao = fotoExibicao;
+	}
+
+	public StreamedContent getImagem() {
+		return imagem;
+	}
+
+	public void setImagem(StreamedContent imagem) {
+		this.imagem = imagem;
+	}
+
+	public ArrayList<StreamedContent> getFotos() {
+		return fotos;
+	}
+
+	public void setFotos(ArrayList<StreamedContent> fotos) {
+		this.fotos = fotos;
+	}
+
+	public String getCpfChaveBusca() {
+		return cpfChaveBusca;
+	}
+
+	public void setCpfChaveBusca(String cpfChaveBusca) {
+		this.cpfChaveBusca = cpfChaveBusca;
+	}
+
+	public boolean isExibirCampoDeConsulta() {
+		return exibirCampoDeConsulta;
+	}
+
+	public void setExibirCampoDeConsulta(boolean exibirCampoDeConsulta) {
+		this.exibirCampoDeConsulta = exibirCampoDeConsulta;
+	}
 }

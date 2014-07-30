@@ -1,6 +1,5 @@
 package persistense;
 
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,8 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import util.FabricaDeConexoes;
+import classesbasicas.Endereco;
 import classesbasicas.Paciente;
 import classesbasicas.Pessoa;
+import classesbasicas.Telefone;
 
 public class RepositorioPacienteBDR implements InterfacePaciente{
 
@@ -96,38 +97,79 @@ public class RepositorioPacienteBDR implements InterfacePaciente{
 			}
 		}
 	}
-
-	public void inserirImagem(InputStream foto, Paciente paciente){
-		
+	
+	public Paciente consultarPaciente(String cpf){
 		Connection conexao = null;
 		PreparedStatement stmt = null;
+		StringBuffer sbi = new StringBuffer();
+		ResultSet rs = null;
+		Paciente paciente = null;
+		int i = 1;
 
+		sbi.append("SELECT ");
+		sbi.append("CPF,");
+		sbi.append("ESTADO_CIVIL,");
+		sbi.append("NOME,");
+		sbi.append("ENDERECO,");
+		sbi.append("SEXO,");
+		sbi.append("FONE,");
+		sbi.append("FOTO,");
+		sbi.append("COD_PACIENTE,");
+		sbi.append("CONVENIO ");
+		sbi.append("FROM ");
+		sbi.append("tb_paciente ");
+		sbi.append("WHERE ");
+		sbi.append("cpf = ?");
+		
 		try {
 			conexao = FabricaDeConexoes.getConnection();
-			StringBuffer sbi = new StringBuffer();
-			
-			sbi.append("INSERT INTO TB_PACIENTE(seq_idPaciente.NEXTVAL, cpf, foto) VALUES(?,?)");
-			
 			stmt = conexao.prepareStatement(sbi.toString());
+			stmt.setString(i, cpf);
+
+			paciente = new Paciente();
+
+			rs = stmt.executeQuery();
 			
-			stmt.setString(1, paciente.getCpf());
-			stmt.setBinaryStream(2, foto);
-			stmt.executeUpdate();
+
+			while(rs.next()){
+				paciente = this.carregarPaciente(rs);
+			}
 			
-		}
-		catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally {
+		}finally{
 			try {
 				stmt.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
+		
+		return paciente;
+	}
+	
+	public final Paciente carregarPaciente(ResultSet rs){
+		Paciente paciente = new Paciente();
+		Endereco endereco = new Endereco();
+		Telefone telefone = new Telefone();
+		try {
+			paciente.setConvenio(rs.getString("convenio"));
+			paciente.setCpf(rs.getString("cpf"));
+			paciente.setEstadoCivil(rs.getString("estado_civil"));
+			paciente.setIdPaciente(rs.getString("cod_paciente"));
+			paciente.setNome(rs.getString("nome"));
+			paciente.setSexo(rs.getString("sexo"));
+			paciente.setFoto(rs.getBinaryStream("foto"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return paciente;
 	}
 
+/*
 	public InputStream consultarImagem(int id){
 
 		Connection conexao = null;
@@ -158,7 +200,7 @@ public class RepositorioPacienteBDR implements InterfacePaciente{
 		}
 		return blob;
 	}
-	
+*/	
 	
 	@Override
 	public void atualizar(Pessoa pessoa) {
@@ -174,33 +216,4 @@ public class RepositorioPacienteBDR implements InterfacePaciente{
 	public ArrayList<Pessoa> consultarPessoa(Pessoa Pessoa) {
 		return null;
 	}
-	
-	/*public void inserirFoto(InputStream data){
-		
-		Connection conexao = null;
-		PreparedStatement stmt = null;
-
-		try {
-			conexao = ConnectionFactory.getConnection();
-			stmt = conexao.prepareStatement("INSERT INTO foto(id, foto) VALUES (?, ?)");
-
-			//LEMBRAR DE TIRAR ESSE ID
-			
-			stmt.setInt(1, 1);
-			stmt.setBinaryStream(2, data);
-			stmt.executeUpdate();
-		}
-		catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}finally {
-			try {
-				stmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		this.consultarImagem(1);
-	}*/
 }

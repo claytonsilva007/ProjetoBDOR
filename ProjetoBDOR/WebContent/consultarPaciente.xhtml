@@ -1,0 +1,72 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Projeto BDOR</title>
+	<link type="text/css" rel="stylesheet" media="screen"
+		href="./style.css" />
+</h:head>
+<h:body>
+	<f:view>
+		<h:form id="formConsultaPaciente">
+
+			<p:outputPanel rendered="#{pacienteBean.exibirCampoDeConsulta}" id="painelConsultaPaciente">
+				<p:outputLabel value="CPF * : " />
+				<p:inputText id="idCpfBusca" size="11" maxlength="11" required="true"
+					value="#{pacienteBean.cpfChaveBusca}">
+					<f:convertNumber integerOnly="true" />
+				</p:inputText>
+
+				<p:commandButton value="Consultar paciente" id="ajax"
+					actionListener="#{pacienteBean.consultarPaciente}" ajax="true"
+					process="@form" update="formConsultaPaciente, idImagemDataTable, painelConsultaPaciente" />
+			</p:outputPanel>
+
+			<h:panelGrid id="gridConsulta" columns="2">
+
+				<p:outputLabel id="idNome" value="Nome" />
+				<p:inputText id="idInputNome" size="40" maxlength="50"
+					value="#{pacienteBean.nome}" />
+
+				<p:outputLabel value="CPF * : " />
+				<p:inputText id="idCpf" size="11" maxlength="11"
+					value="#{pacienteBean.cpf}">
+					<f:convertNumber integerOnly="true" />
+				</p:inputText>
+
+				<p:outputLabel for="popup" value="Data Nasc." />
+				<p:calendar id="popup" size="11" maxlength="10"
+					value="#{pacienteBean.dataNasc}" />
+
+				<p:outputLabel for="console" value="Sexo * :" />
+				<p:selectOneRadio id="console" value="#{pacienteBean.sexo}">
+					<f:selectItem itemLabel="Masculino" itemValue="M" />
+					<f:selectItem itemLabel="Feminino" itemValue="F" />
+				</p:selectOneRadio>
+
+				<p:outputLabel id="advanced2" value="Selecione o estado civil: " />
+				<p:selectOneMenu id="city2"
+					value="#{pacienteBean.estadoCivilSelecionado}" effect="fold"
+					editable="true">
+					<f:selectItems value="#{pacienteBean.tiposEstadosCivis}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel id="idConvenio" value="Convênio: " />
+				<p:inputText id="idInputConvenio" size="15" maxlength="15"
+					value="#{pacienteBean.convenio}" />
+			</h:panelGrid>
+
+			<p:dataTable value="#{pacienteBean.fotos}" var="student" id="idImagemDataTable">
+				<p:column>
+					<p:graphicImage value="#{pacienteBean.imagem}">
+						<f:param name="studentId" value="" />
+					</p:graphicImage>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</f:view>
+</h:body>
+
+</html>
